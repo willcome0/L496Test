@@ -128,14 +128,13 @@ standard names. */
 
 /* USER CODE BEGIN Defines */
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
-#define configUSE_TRACE_FACILITY                        1
+#define configUSE_TRACE_FACILITY                        1   // 开启可视化跟踪调试
 #define configUSE_STATS_FORMATTING_FUNCTIONS            1
 
-#define configUSE_STATS_FORMATTING_FUNCTIONS            1
-#define configGENERATE_RUN_TIME_STATS                   1
+#define configGENERATE_RUN_TIME_STATS                   1   // 开启时钟统计功能
 
-#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()        (ulHighFrequencyTimerTicks = 1ul)
-#define portGET_RUN_TIME_COUNTER_VALUE()                ulHighFrequencyTimerTicks
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()        (ulHighFrequencyTimerTicks = 1ul)   // 初始化一个外设作为时钟统计得基准时钟
+#define portGET_RUN_TIME_COUNTER_VALUE()                ulHighFrequencyTimerTicks           // 返回当前基准时钟得时钟值
 
 /* USER CODE END Defines */
 

@@ -77,9 +77,11 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
+/* 定义服务 */
 osThreadId LED3TaskHandle;
-osThreadId OLEDTaskHandle;
-osThreadId OLEDRefreshHandle;
+osThreadId OLEDTaskHandle;          // OLED 显示内容
+osThreadId OLEDRefreshHandle;       // OLED 显示刷新
+osThreadId ReadTaskStateHandle;     // 显示任务状态
 
 /* USER CODE END Variables */
 osThreadId defaultTaskHandle;
@@ -89,6 +91,7 @@ osThreadId defaultTaskHandle;
 void StartLED3Task(void const * argument);
 void OLEDShowTask(void const * argument);
 void OLEDRefreshTask(void const * argument);
+void ReadTaskStateTask(void const * argument);
 
 /* USER CODE END FunctionPrototypes */
 
@@ -121,23 +124,26 @@ void MX_FREERTOS_Init(void)
 
     /* Create the thread(s) */
     /* definition and creation of defaultTask */
-    osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+    osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 32);
     defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
     /* USER CODE BEGIN RTOS_THREADS */
     /* add threads, ... */
     osThreadDef(LED3Task,       StartLED3Task,      osPriorityNormal,   0, 32);
-    osThreadDef(OLEDShow,       OLEDShowTask,       osPriorityRealtime, 0, 128);    // OLED 显示内容
+    osThreadDef(OLEDShow,       OLEDShowTask,       osPriorityNormal,   0, 128);    // OLED 显示内容
     osThreadDef(OLEDRefresh,    OLEDRefreshTask,    osPriorityNormal,   0, 64);     // OLED 显示刷新
+    osThreadDef(ReadTaskState,  ReadTaskStateTask,  osPriorityNormal,   0, 128);    // 显示任务状态
+    
     
     /* USER CODE END RTOS_THREADS */
 
     /* USER CODE BEGIN RTOS_QUEUES */
     /* add queues, ... */
-    LED3TaskHandle = osThreadCreate(osThread(LED3Task), NULL);
-    OLEDTaskHandle = osThreadCreate(osThread(OLEDShow), NULL);
-    OLEDRefreshHandle = osThreadCreate(osThread(OLEDRefresh), NULL);
-
+    LED3TaskHandle      = osThreadCreate(osThread(LED3Task),        NULL);
+    OLEDTaskHandle      = osThreadCreate(osThread(OLEDShow),        NULL);      // OLED 显示内容
+    OLEDRefreshHandle   = osThreadCreate(osThread(OLEDRefresh),     NULL);      // OLED 显示刷新
+    ReadTaskStateHandle = osThreadCreate(osThread(ReadTaskState),   NULL);      // 显示任务状态
+    
     /* USER CODE END RTOS_QUEUES */
 }
 
@@ -153,45 +159,15 @@ void StartDefaultTask(void const * argument)
 
     /* USER CODE BEGIN StartDefaultTask */
     /* Infinite loop */
-    uint8_t pcWriteBuffer[100];
-    uint8_t TaskName[16];
-    uint8_t TaskCount = 0;
-    uint8_t process = 0;
+    
     for (;;)
     {
         osDelay(10);
-        vTaskList((char *)&pcWriteBuffer);
-        printf("U\t\tU\tU\tU\tU\r\n");
-        printf(pcWriteBuffer);
-        printf("\r\n");
+        HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
         
-        osDelay(10);
-        printf("\r\nUU\t\tUU\t\tUU\r\n");
-        vTaskGetRunTimeStats((char *)&pcWriteBuffer);
-        
-//        for (uint8_t i=0; i<strlen(pcWriteBuffer); i++)
-//        {
-//            switch (process)
-//            {
-//                case 0: // 获取任务名
-//                    if (pcWriteBuffer[i] == ' ' || pcWriteBuffer[i] == '\t')
-//                    {
-//                        TaskName[i] = 0;
-//                        process++;
-//                        break;
-//                    }
-//                    TaskName[i] = pcWriteBuffer[i];
-//                    break;
-//                    
-//                case 1:
-//                    if ()
-//            }
-//            
-//        }
-        
-        printf("\r\n开始");
-        printf(TaskName);
-        printf("结束\r\n");
+//        osDelay(100);
+//        printf("Temp:91.79 \r\n");
+//        printf("Hum:109.23 \n");
     }
     /* USER CODE END StartDefaultTask */
 }
@@ -204,6 +180,7 @@ void StartLED3Task(void const * argument)
     {
         osDelay(250);
         HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
+        
     }
 }
 
@@ -213,13 +190,12 @@ void OLEDShowTask(void const * argument)
     {
         osDelay(40);
         static uint32_t count = 0;
-        uint8_t str[15] = {0};
-        sprintf(str, "MyCount:%d", count++);
+        char str[20] = {0};           // 这里是个疑问，用*str就不行
+        sprintf(str, "计数:%d", count++);
         OLED_Show_StrAll(0, 0, str, 1);
 
-        sprintf(str, "Priority:%d", (int)uxTaskPriorityGet(OLEDTaskHandle));
+        sprintf(str, "优先级:%d", (int)uxTaskPriorityGet(OLEDTaskHandle));
         OLED_Show_StrAll(0, 15, str, 1);
-        
     }
 }
 
@@ -231,6 +207,50 @@ void OLEDRefreshTask(void const * argument)
     {
         osDelay(40);    // 大概25帧
         OLED_Refresh_Gram();
+    }
+}
+
+void ReadTaskStateTask(void const * argument)
+{
+//    char *pcWriteBuffer = 0;
+    for (;;)
+    {
+        osDelay(10);
+        if (HAL_GPIO_ReadPin(Button1_GPIO_Port, Button1_Pin) == GPIO_PIN_SET)
+        {
+            // 为什么大于4个任务就完全不显示
+//            vTaskList((char *)&pcWriteBuffer);
+//    //        printf("U\t\tU\tU\tU\tU\r\n");
+//            printf("任务名      运行状态  优先级  剩余栈 任务序号\r\n");
+//            printf(pcWriteBuffer);
+//            printf("\r\n");
+//            
+//    //        printf("\r\nUU\t\tUU\t\tUU\r\n");
+//            printf("任务名      运行次数         使用率\r\n");
+//            vTaskGetRunTimeStats((char *)&pcWriteBuffer);
+//            printf(pcWriteBuffer);
+//            printf("\r\n");
+            uint32_t TotalRunTime = 0;
+            UBaseType_t ArraySize = uxTaskGetNumberOfTasks();   // 获取任务数量
+            TaskStatus_t *StatusArray = pvPortMalloc(ArraySize * sizeof(TaskStatus_t)); // 申请内存
+            if (StatusArray != NULL)
+            {
+                ArraySize = uxTaskGetSystemState((TaskStatus_t *)StatusArray,
+                                                 (UBaseType_t   )ArraySize,
+                                                 (uint32_t *    )&TotalRunTime);
+                
+                for (UBaseType_t i=0; i<ArraySize; i++)
+                {
+                    printf("%-15s \t %-6d \t %-6d\r\n",
+                           StatusArray[i].pcTaskName,
+                           (int)StatusArray[i].uxCurrentPriority,
+                           (int)StatusArray[i].xTaskNumber);
+                }
+            }
+            vPortFree(StatusArray);
+            
+            while (HAL_GPIO_ReadPin(Button1_GPIO_Port, Button1_Pin) == GPIO_PIN_SET);
+        }
     }
 }
 /* USER CODE END Application */

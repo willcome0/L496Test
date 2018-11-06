@@ -46,10 +46,10 @@ enum CmdDataSlect
 void OLED_Refresh_Gram(void);
 void OLED_DrawPoint(uint8_t x, uint8_t y, uint8_t mode);
 void OLED_Fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t mode);
-void OLED_Show_Char(uint8_t x, uint8_t y, uint8_t chr, uint8_t size, uint8_t mode);
-void OLED_Show_Str(uint8_t x, uint8_t y, const uint8_t *ch, uint8_t size, uint8_t mode);
-void OLED_Show_ZH12_12(uint8_t x, uint8_t y, uint8_t ch1, uint8_t ch2, uint8_t mode);
-void  OLED_Show_StrAll(uint8_t x, uint8_t y, uint8_t *str, uint8_t mode);
+void OLED_Show_Char(uint8_t x, uint8_t y, char chr, uint8_t size, uint8_t mode);
+void OLED_Show_Str(uint8_t x, uint8_t y, char *ch, uint8_t size, uint8_t mode);
+void OLED_Show_ZH12_12(uint8_t x, uint8_t y, char ch1, char ch2, uint8_t mode);
+void  OLED_Show_StrAll(uint8_t x, uint8_t y, char *str, uint8_t mode);
 
 void IIC_Start();
 void IIC_Stop();

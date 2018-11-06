@@ -1,1 +1,3 @@
 EWARM/L496Test/Obj/
+*.dep
+*.wsdt
