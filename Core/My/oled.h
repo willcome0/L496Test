@@ -9,7 +9,14 @@ extern "C" {
 #include "stm32l4xx_hal.h"
 #include "common.h"
 
+#define ZH_SIZE_14	14
+    
+#define ZH_FONT14_NUM       50
+#define ZH_FONT14_HEX_NUM   28
 
+#define ZH_FONT18_NUM       20
+#define ZH_FONT18_HEX_NUM   54
+    
 #define	OLED_X_MAX		88				// 定义液晶x轴的像素数
 #define	OLED_Y_MAX		128 				// 定义液晶y轴的像素数
 #define	PAGE_MAX		OLED_Y_MAX/8	// 页地址
@@ -48,8 +55,8 @@ void OLED_DrawPoint(uint8_t x, uint8_t y, uint8_t mode);
 void OLED_Fill(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t mode);
 void OLED_Show_Char(uint8_t x, uint8_t y, char chr, uint8_t size, uint8_t mode);
 void OLED_Show_Str(uint8_t x, uint8_t y, char *ch, uint8_t size, uint8_t mode);
-void OLED_Show_ZH12_12(uint8_t x, uint8_t y, char ch1, char ch2, uint8_t mode);
-void  OLED_Show_StrAll(uint8_t x, uint8_t y, char *str, uint8_t mode);
+void OLED_Show_ZH(uint8_t x, uint8_t y, uint8_t fontSize, char ch1, char ch2, uint8_t mode);
+void OLED_Show_StrAll(uint8_t x, uint8_t y, uint8_t fontSize, char *str, uint8_t mode);
 
 void IIC_Start();
 void IIC_Stop();
@@ -85,7 +92,7 @@ extern const unsigned char asc2_1206[95][12];
 extern const unsigned char asc2_1608[95][16];
 extern const unsigned char asc2_2412[95][36];
 
-
+extern const char IMG64[10][512];
 
 
 

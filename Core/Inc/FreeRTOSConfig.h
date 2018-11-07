@@ -133,7 +133,7 @@ standard names. */
 
 #define configGENERATE_RUN_TIME_STATS                   1   // 开启时钟统计功能
 
-#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()        (ulHighFrequencyTimerTicks = 1ul)   // 初始化一个外设作为时钟统计得基准时钟
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()        (ulHighFrequencyTimerTicks = 0ul)   // 初始化一个外设作为时钟统计得基准时钟
 #define portGET_RUN_TIME_COUNTER_VALUE()                ulHighFrequencyTimerTicks           // 返回当前基准时钟得时钟值
 
 /* USER CODE END Defines */

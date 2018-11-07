@@ -1,3 +1,9 @@
 EWARM/L496Test/Obj/
 *.dep
 *.wsdt
+*.dnx
+*.dbgdt
+*.map
+*.sim
+*.out
+EWARM/L496Test/Exe/
