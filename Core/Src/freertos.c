@@ -194,14 +194,14 @@ void OLEDShowTask(void const * argument)
 //        sprintf(str, "计数:%d", count++);
 //        OLED_Show_StrAll(0, 0, str, 1);
         
-        OLED_Show_Pic(11, 20, IMG64[(count++/15)%5], 64, 64, 1);
+        OLED_Show_Pic(11, 25, IMG64[(count++/15)%5], 64, 64, 1);
         switch ((count++/15)%5)
         {
-            case 0: OLED_Show_StrAll(25, 95, 18, "拨号", 1);  break;
-            case 1: OLED_Show_StrAll(25, 95, 18, "影音", 1);  break;
-            case 2: OLED_Show_StrAll(25, 95, 18, "搜索", 1);  break;
-            case 3: OLED_Show_StrAll(25, 95, 18, "游戏", 1);  break;
-            case 4: OLED_Show_StrAll(25, 95, 18, "设置", 1);  break;
+            case 0: OLED_Show_StrAll(23, 95, 16, "拨 号", 1);  break;
+            case 1: OLED_Show_StrAll(23, 95, 16, "影 音", 1);  break;
+            case 2: OLED_Show_StrAll(23, 95, 16, "搜 索", 1);  break;
+            case 3: OLED_Show_StrAll(23, 95, 16, "游 戏", 1);  break;
+            case 4: OLED_Show_StrAll(23, 95, 16, "设 置", 1);  break;
             
         }
         
