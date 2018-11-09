@@ -10,7 +10,7 @@ extern "C" {
 #include "common.h"
 
 #define ZH_SIZE_14	14
-    
+
 #define ZH_FONT14_NUM       50
 #define ZH_FONT14_HEX_NUM   28
 
@@ -19,9 +19,9 @@ extern "C" {
 
 #define ZH_FONT16_NUM       20
 #define ZH_FONT16_HEX_NUM   32
-    
+
 #define EN_FONT16_HEX_NUM   16
-    
+
 #define	OLED_X_MAX		88				// 定义液晶x轴的像素数
 #define	OLED_Y_MAX		128 				// 定义液晶y轴的像素数
 #define	PAGE_MAX		OLED_Y_MAX/8	// 页地址

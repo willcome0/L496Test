@@ -13,6 +13,8 @@ extern "C" {
 #include "usart.h"
 #include "oled.h"
 #include "mpu9250.h"
+#include "tim.h"
+
 
 
 

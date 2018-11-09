@@ -40,18 +40,17 @@
  * See http://www.freertos.org/a00110.html
  *----------------------------------------------------------*/
 
-/* USER CODE BEGIN Includes */
+/* USER CODE BEGIN Includes */   	      
 /* Section where include file can be added */
+#if defined(__ICCARM__) || defined(__CC_ARM) || defined(__GNUC__)
+    #include "tim.h"    // 匪夷所思
+#endif
 
-
-
-
-/* USER CODE END Includes */
+/* USER CODE END Includes */ 
 
 /* Ensure stdint is only used by the compiler, and not the assembler. */
 #if defined(__ICCARM__) || defined(__CC_ARM) || defined(__GNUC__)
     #include <stdint.h>
-    #include <tim.h>
     extern uint32_t SystemCoreClock;
 #endif
 
@@ -73,7 +72,7 @@
 
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES                    0
-#define configMAX_CO_ROUTINE_PRIORITIES          ( 3 )
+#define configMAX_CO_ROUTINE_PRIORITIES          ( 2 )
 
 /* Set the following definitions to 1 to include the API function, or zero
 to exclude the API function. */
@@ -88,10 +87,10 @@ to exclude the API function. */
 
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS
-    /* __BVIC_PRIO_BITS will be specified when CMSIS is being used. */
-    #define configPRIO_BITS         __NVIC_PRIO_BITS
+ /* __BVIC_PRIO_BITS will be specified when CMSIS is being used. */
+ #define configPRIO_BITS         __NVIC_PRIO_BITS
 #else
-    #define configPRIO_BITS         4
+ #define configPRIO_BITS         4
 #endif
 
 /* The lowest interrupt priority that can be used in a call to a "set priority"
@@ -122,12 +121,14 @@ standard names. */
 #define vPortSVCHandler    SVC_Handler
 #define xPortPendSVHandler PendSV_Handler
 
-/* IMPORTANT: This define MUST be commented when used with STM32Cube firmware,
+/* IMPORTANT: This define MUST be commented when used with STM32Cube firmware, 
               to prevent overwriting SysTick_Handler defined within STM32Cube HAL */
 /* #define xPortSysTickHandler SysTick_Handler */
 
-/* USER CODE BEGIN Defines */
+/* USER CODE BEGIN Defines */   	      
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
+
+
 #define configUSE_TRACE_FACILITY                        1   // 开启可视化跟踪调试
 #define configUSE_STATS_FORMATTING_FUNCTIONS            1
 
@@ -136,6 +137,6 @@ standard names. */
 #define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()        (ulHighFrequencyTimerTicks = 0ul)   // 初始化一个外设作为时钟统计得基准时钟
 #define portGET_RUN_TIME_COUNTER_VALUE()                ulHighFrequencyTimerTicks           // 返回当前基准时钟得时钟值
 
-/* USER CODE END Defines */
+/* USER CODE END Defines */ 
 
 #endif /* FREERTOS_CONFIG_H */

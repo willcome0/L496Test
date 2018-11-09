@@ -55,7 +55,7 @@
 #include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+/* USER CODE BEGIN Includes */     
 #include "common.h"
 #include "string.h"
 /* USER CODE END Includes */
@@ -77,6 +77,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
+
 /* 定义服务 */
 osThreadId LED3TaskHandle;
 osThreadId OLEDTaskHandle;          // OLED 显示内容
@@ -104,47 +105,46 @@ void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
   * @param  None
   * @retval None
   */
-void MX_FREERTOS_Init(void)
-{
-    /* USER CODE BEGIN Init */
+void MX_FREERTOS_Init(void) {
+  /* USER CODE BEGIN Init */
 
-    /* USER CODE END Init */
+  /* USER CODE END Init */
 
-    /* USER CODE BEGIN RTOS_MUTEX */
+  /* USER CODE BEGIN RTOS_MUTEX */
     /* add mutexes, ... */
-    /* USER CODE END RTOS_MUTEX */
+  /* USER CODE END RTOS_MUTEX */
 
-    /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
     /* add semaphores, ... */
-    /* USER CODE END RTOS_SEMAPHORES */
+  /* USER CODE END RTOS_SEMAPHORES */
 
-    /* USER CODE BEGIN RTOS_TIMERS */
+  /* USER CODE BEGIN RTOS_TIMERS */
     /* start timers, add new ones, ... */
-    /* USER CODE END RTOS_TIMERS */
+  /* USER CODE END RTOS_TIMERS */
 
-    /* Create the thread(s) */
-    /* definition and creation of defaultTask */
-    osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 32);
-    defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+  /* Create the thread(s) */
+  /* definition and creation of defaultTask */
+  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
-    /* USER CODE BEGIN RTOS_THREADS */
+  /* USER CODE BEGIN RTOS_THREADS */
     /* add threads, ... */
     osThreadDef(LED3Task,       StartLED3Task,      osPriorityNormal,       0, 32);
     osThreadDef(OLEDShow,       OLEDShowTask,       osPriorityAboveNormal,  0, 128);    // OLED 显示内容
     osThreadDef(OLEDRefresh,    OLEDRefreshTask,    osPriorityNormal,       0, 64);     // OLED 显示刷新
     osThreadDef(ReadTaskState,  ReadTaskStateTask,  osPriorityNormal,       0, 128);    // 显示任务状态
-    
-    
-    /* USER CODE END RTOS_THREADS */
 
-    /* USER CODE BEGIN RTOS_QUEUES */
+
+  /* USER CODE END RTOS_THREADS */
+
+  /* USER CODE BEGIN RTOS_QUEUES */
     /* add queues, ... */
     LED3TaskHandle      = osThreadCreate(osThread(LED3Task),        NULL);
     OLEDTaskHandle      = osThreadCreate(osThread(OLEDShow),        NULL);      // OLED 显示内容
     OLEDRefreshHandle   = osThreadCreate(osThread(OLEDRefresh),     NULL);      // OLED 显示刷新
     ReadTaskStateHandle = osThreadCreate(osThread(ReadTaskState),   NULL);      // 显示任务状态
-    
-    /* USER CODE END RTOS_QUEUES */
+
+  /* USER CODE END RTOS_QUEUES */
 }
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -157,19 +157,19 @@ void MX_FREERTOS_Init(void)
 void StartDefaultTask(void const * argument)
 {
 
-    /* USER CODE BEGIN StartDefaultTask */
+  /* USER CODE BEGIN StartDefaultTask */
     /* Infinite loop */
-    
+
     for (;;)
     {
         osDelay(500);
         HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
-        
+
 //        osDelay(100);
 //        printf("Temp:91.79 \r\n");
 //        printf("Hum:109.23 \n");
     }
-    /* USER CODE END StartDefaultTask */
+  /* USER CODE END StartDefaultTask */
 }
 
 /* Private application code --------------------------------------------------*/
@@ -180,7 +180,7 @@ void StartLED3Task(void const * argument)
     {
         osDelay(250);
         HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
-        
+
     }
 }
 
@@ -193,19 +193,29 @@ void OLEDShowTask(void const * argument)
 //        char str[20] = {0};           // 这里是个疑问，用*str就不行
 //        sprintf(str, "计数:%d", count++);
 //        OLED_Show_StrAll(0, 0, str, 1);
-        
+
         OLED_Show_Pic(11, 25, IMG64[(count++/15)%5], 64, 64, 1);
         switch ((count++/15)%5)
         {
-            case 0: OLED_Show_StrAll(23, 95, 16, "拨 号", 1);  break;
-            case 1: OLED_Show_StrAll(23, 95, 16, "影 音", 1);  break;
-            case 2: OLED_Show_StrAll(23, 95, 16, "搜 索", 1);  break;
-            case 3: OLED_Show_StrAll(23, 95, 16, "游 戏", 1);  break;
-            case 4: OLED_Show_StrAll(23, 95, 16, "设 置", 1);  break;
-            
+            case 0:
+                OLED_Show_StrAll(23, 95, 16, "拨 号", 1);
+                break;
+            case 1:
+                OLED_Show_StrAll(23, 95, 16, "影 音", 1);
+                break;
+            case 2:
+                OLED_Show_StrAll(23, 95, 16, "搜 索", 1);
+                break;
+            case 3:
+                OLED_Show_StrAll(23, 95, 16, "游 戏", 1);
+                break;
+            case 4:
+                OLED_Show_StrAll(23, 95, 16, "设 置", 1);
+                break;
+
         }
-        
-        
+
+
         OLED_Refresh_Gram();
     }
 }
@@ -236,14 +246,14 @@ void ReadTaskStateTask(void const * argument)
 //            printf("任务名      运行状态  优先级  剩余栈 任务序号\r\n");
 //            printf(pcWriteBuffer);
 //            printf("\r\n");
-//            
+//
 //    //        printf("\r\nUU\t\tUU\t\tUU\r\n");
-            
-            
+
+
             TaskHandle_t TaskHandle;        // 任务句柄
             TaskStatus_t TaskStatus;        // 任务信息结构体
-            
-            uint32_t TotalRunTime = 0;      
+
+            uint32_t TotalRunTime = 0;
             UBaseType_t ArraySize = uxTaskGetNumberOfTasks();   // 获取任务数量
             TaskStatus_t *StatusArray = pvPortMalloc(ArraySize * sizeof(TaskStatus_t)); // 申请内存
             if (StatusArray != NULL)
@@ -251,7 +261,7 @@ void ReadTaskStateTask(void const * argument)
                 ArraySize = uxTaskGetSystemState((TaskStatus_t *)StatusArray,
                                                  (UBaseType_t   )ArraySize,
                                                  (uint32_t *    )&TotalRunTime);
-                
+
                 printf("%-15s   %-8s   %-8s   %-8s   %-8s   %-8s   %-10s \r\n",
                        "任务名",
                        "基优先级",
@@ -271,14 +281,26 @@ void ReadTaskStateTask(void const * argument)
                     char stateStr[8] = {0};
                     switch (TaskStatus.eCurrentState)
                     {
-                        case eRunning:  sprintf(stateStr, "运行");  break;
-                        case eReady:    sprintf(stateStr, "就绪");  break;
-                        case eBlocked:  sprintf(stateStr, "阻塞");  break;
-                        case eSuspended:sprintf(stateStr, "暂停");  break;
-                        case eDeleted:  sprintf(stateStr, "删除");  break;
-                        case eInvalid:  sprintf(stateStr, "无效");  break;
+                        case eRunning:
+                            sprintf(stateStr, "运行");
+                            break;
+                        case eReady:
+                            sprintf(stateStr, "就绪");
+                            break;
+                        case eBlocked:
+                            sprintf(stateStr, "阻塞");
+                            break;
+                        case eSuspended:
+                            sprintf(stateStr, "暂停");
+                            break;
+                        case eDeleted:
+                            sprintf(stateStr, "删除");
+                            break;
+                        case eInvalid:
+                            sprintf(stateStr, "无效");
+                            break;
                     }
-                    
+
                     printf("%-15s   %-8d   %-8d   %-8d   %-8s   %-8d   %-#10x \r\n",
                            StatusArray[i].pcTaskName,               // 任务名
                            (int)TaskStatus.uxBasePriority,          // 任务基优先级
@@ -287,8 +309,8 @@ void ReadTaskStateTask(void const * argument)
                            stateStr,                                // 任务运行状态
                            (int)TaskStatus.usStackHighWaterMark,    // 任务堆栈历史最小值
                            (int)TaskStatus.pxStackBase              // 任务堆栈基地址
-                           
-                           );
+
+                          );
                 }
                 printf("\r\n");
                 printf("任务名          运行时间        使用率\r\n");
@@ -297,9 +319,9 @@ void ReadTaskStateTask(void const * argument)
                 printf("%s\r\n", RunTimeInfo);
             }
             vPortFree(StatusArray);
-            
-            
-            
+
+
+
             while (HAL_GPIO_ReadPin(Button1_GPIO_Port, Button1_Pin) == GPIO_PIN_SET);
         }
     }

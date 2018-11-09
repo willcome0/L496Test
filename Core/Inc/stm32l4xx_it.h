@@ -36,8 +36,8 @@
 #define __STM32L4xx_IT_H
 
 #ifdef __cplusplus
-extern "C" {
-#endif
+ extern "C" {
+#endif 
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l4xx_hal.h"

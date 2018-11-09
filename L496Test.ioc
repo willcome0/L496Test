@@ -1,6 +1,10 @@
 #MicroXplorer Configuration settings - do not modify
 FREERTOS.FootprintOK=true
-FREERTOS.IPParameters=Tasks01,FootprintOK
+FREERTOS.INCLUDE_eTaskGetState=0
+FREERTOS.INCLUDE_pcTaskGetTaskName=0
+FREERTOS.INCLUDE_xTaskGetCurrentTaskHandle=0
+FREERTOS.INCLUDE_xTaskGetHandle=0
+FREERTOS.IPParameters=Tasks01,FootprintOK,INCLUDE_xTaskGetHandle,INCLUDE_eTaskGetState,INCLUDE_xTaskGetCurrentTaskHandle,INCLUDE_pcTaskGetTaskName
 FREERTOS.Tasks01=defaultTask,0,128,StartDefaultTask,Default,NULL,Dynamic,NULL,NULL
 File.Version=6
 I2C2.I2C_Fall_Time=2
@@ -318,8 +322,9 @@ RCC.VcooutputI2S=48000000
 RCC.WatchDogFreq_Value=32000
 SH.GPXTI13.0=GPIO_EXTI13
 SH.GPXTI13.ConfNb=1
-TIM2.IPParameters=Prescaler
-TIM2.Prescaler=47332
+TIM2.IPParameters=Prescaler,Period
+TIM2.Period=49
+TIM2.Prescaler=79
 USART3.BaudRate=9600
 USART3.IPParameters=VirtualMode-Asynchronous,BaudRate
 USART3.VirtualMode-Asynchronous=VM_ASYNC
